@@ -1,0 +1,64 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Line2D",
+"class": "Connector",
+"language": "GDScript",
+"path": "res://assets/scripts/connector.gd"
+}, {
+"base": "Node2D",
+"class": "Element",
+"language": "GDScript",
+"path": "res://assets/scripts/element.gd"
+}, {
+"base": "Slot",
+"class": "InputSlot",
+"language": "GDScript",
+"path": "res://assets/scripts/input_slot.gd"
+}, {
+"base": "Slot",
+"class": "OutputSlot",
+"language": "GDScript",
+"path": "res://assets/scripts/output_slot.gd"
+}, {
+"base": "Area2D",
+"class": "Slot",
+"language": "GDScript",
+"path": "res://assets/scripts/slot.gd"
+} ]
+_global_script_class_icons={
+"Connector": "",
+"Element": "",
+"InputSlot": "",
+"OutputSlot": "",
+"Slot": ""
+}
+
+[application]
+
+config/name="logic_gates"
+config/description="Dev: lmcdd (Derbin Dmitry)
+https://github.com/lmcdd/godot-logic-gates"
+run/main_scene="res://assets/scenes/main.tscn"
+config/icon="res://icon.png"
+
+[display]
+
+window/stretch/mode="2d"
+window/stretch/aspect="expand"
+
+[rendering]
+
+quality/driver/driver_name="GLES2"
+vram_compression/import_etc=true
+vram_compression/import_etc2=false
+environment/default_clear_color=Color( 0.439216, 0.576471, 0.576471, 1 )
+environment/default_environment="res://default_env.tres"
