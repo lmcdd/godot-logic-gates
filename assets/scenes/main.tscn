@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/scripts/main.gd" type="Script" id=1]
 [ext_resource path="res://assets/scripts/camera.gd" type="Script" id=2]
 [ext_resource path="res://assets/scenes/switch.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/scenes/lamp.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/images/elements/clock.png" type="Texture" id=5]
+[ext_resource path="res://assets/scripts/connector.gd" type="Script" id=6]
 [ext_resource path="res://assets/scenes/btn_add_element.tscn" type="PackedScene" id=8]
 [ext_resource path="res://assets/images/elements/lamp.png" type="Texture" id=9]
 [ext_resource path="res://assets/images/elements/xor.png" type="Texture" id=10]
@@ -28,6 +29,10 @@ position = Vector2( -148.871, -7.7746 )
 
 [node name="Connectors" type="Node2D" parent="."]
 z_index = -1
+
+[node name="Connector" type="Line2D" parent="Connectors"]
+points = PoolVector2Array( -98.6095, -5.26328 )
+script = ExtResource( 6 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

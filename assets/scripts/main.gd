@@ -37,28 +37,29 @@ func _on_Slot_input_event(viewport, event, shape_idx, slot_node):
 	if event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT: #create connection
-				if !from_slot:
-					from_slot = slot_node
-					line = Connector.new()
-					line.p_slot1 = slot_node
-					$Connectors.add_child(line)
-				else:
-					if slot_node.get_slot_type() != from_slot.get_slot_type(): # In -> out , Out -> in
-						var exists_connect = false #
-						var connections = slot_node.connections["out"] + slot_node.connections["in"]
-						for connection in connections:
-							exists_connect = from_slot in [connection.p_slot1, connection.p_slot2]
-							if exists_connect:
-								break
-						if exists_connect == false and not(slot_node.get_slot_type() == Slot.TYPES.IN and connections.size() > 0):
-							line.points = PoolVector2Array(
-									[from_slot.global_position, slot_node.global_position]
-							)
-							line.p_slot2 = slot_node
-							from_slot.connections["out"].append(line)
-							slot_node.connections["in"].append(line)
-							from_slot = null
-							line = null
+				var connections = slot_node.connections["out"] + slot_node.connections["in"]
+				if not(slot_node.get_slot_type() == Slot.TYPES.IN and connections.size() > 0):
+					if !from_slot:
+						from_slot = slot_node
+						line = Connector.new()
+						line.p_slot1 = slot_node
+						$Connectors.add_child(line)
+					else:
+						if slot_node.get_slot_type() != from_slot.get_slot_type(): # In -> out , Out -> in
+							var exists_connect = false #
+							for connection in connections:
+								exists_connect = from_slot in [connection.p_slot1, connection.p_slot2]
+								if exists_connect:
+									break
+							if exists_connect == false:
+								line.points = PoolVector2Array(
+										[from_slot.global_position, slot_node.global_position]
+								)
+								line.p_slot2 = slot_node
+								from_slot.connections["out"].append(line)
+								slot_node.connections["in"].append(line)
+								from_slot = null
+								line = null
 			elif event.button_index == BUTTON_RIGHT: #del connection
 				var conn_groups = slot_node.connections.keys()
 				for conn_group in conn_groups:
