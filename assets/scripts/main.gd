@@ -77,13 +77,15 @@ func _create_connection(slot_node):
 
 
 func _del_connection(slot_node):
-	for conn in slot_node.out_connections:
-		var c = get_node_or_null(conn)
-		c.del()
-		
-	for conn in slot_node.inp_connections:
-		var c = get_node_or_null(conn)
-		c.del()
+	for path_conn in slot_node.out_connections:
+		var conn = get_node_or_null(path_conn)
+		if conn:
+			conn.call_deferred("del")
+
+	for path_conn in slot_node.inp_connections:
+		var conn = get_node_or_null(path_conn)
+		if conn:
+			conn.call_deferred("del")
 
 	from_slot = null
 	line = null

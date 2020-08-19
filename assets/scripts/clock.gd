@@ -1,14 +1,33 @@
+tool
 extends Element
 
-export(float) var sec = 0.5
-
+export(float) var timeout = 0.5 setget _set_timeout
 var state = false
 
-func _upd(): #override
-	state = !state
-	$"Slots/Out_1".emit(state)
-	yield(get_tree().create_timer(sec), "timeout")
-	_upd()
+func _set_timeout(val):
+	timeout = val
+	$Timer.wait_time = val
 
 func _ready():
-	_upd()
+	G.connect("toggle_pause", self, "_on_toggle_pause")
+	if G.paused:
+		$Timer.stop()
+	else:
+		$Timer.start()
+
+
+func _on_toggle_pause(paused):
+	if paused:
+		$Timer.stop()
+	else:
+		$Timer.start()
+
+
+func _on_Timer_timeout():
+	state = !state
+	if state:
+		$Sprite.self_modulate = Color.green
+	else:
+		$Sprite.self_modulate = Color.white
+	$"Slots/Out_1".emit(state)
+	

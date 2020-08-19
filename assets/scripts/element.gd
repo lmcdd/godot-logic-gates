@@ -30,7 +30,10 @@ func set_state_input(val):
 	_upd()
 
 func _ready():
-	add_to_group(name.split("_")[0])
+	var group = name.replacen("@","").split("_")[0]
+	var n = get_tree().get_nodes_in_group(group).size() + 1
+	add_to_group(group)
+	name = group + '_' + str(n)
 	var i = 0
 	for slot in $"Slots".get_children():
 		if slot.name.begins_with("In"):

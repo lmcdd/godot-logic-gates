@@ -21,8 +21,8 @@ func del():
 		slot.out_connections.erase(self.get_path())
 	assign(false, self)
 	queue_free()
-	
-	
+
+
 func set_emitter(v):
 	emitter = v
 	if emitter and receiver:

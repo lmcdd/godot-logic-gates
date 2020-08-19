@@ -1,16 +1,27 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/scripts/main.gd" type="Script" id=1]
 [ext_resource path="res://assets/scripts/camera.gd" type="Script" id=2]
 [ext_resource path="res://assets/scenes/switch.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/scenes/lamp.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/images/elements/clock.png" type="Texture" id=5]
+[ext_resource path="res://assets/images/pause.png" type="Texture" id=6]
+[ext_resource path="res://assets/scripts/btn_pause.gd" type="Script" id=7]
 [ext_resource path="res://assets/scenes/btn_add_element.tscn" type="PackedScene" id=8]
 [ext_resource path="res://assets/images/elements/lamp.png" type="Texture" id=9]
 [ext_resource path="res://assets/images/elements/xor.png" type="Texture" id=10]
 [ext_resource path="res://assets/images/elements/switch.png" type="Texture" id=11]
 [ext_resource path="res://assets/images/elements/not.png" type="Texture" id=12]
 [ext_resource path="res://assets/images/elements/or.png" type="Texture" id=13]
+
+[sub_resource type="StyleBoxFlat" id=1]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.290196, 0.290196, 0.290196, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=2]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -21,9 +32,10 @@ script = ExtResource( 2 )
 
 [node name="Elements" type="Node2D" parent="."]
 
-[node name="Lamp" parent="Elements" instance=ExtResource( 4 )]
+[node name="Lamp_1" parent="Elements" instance=ExtResource( 4 )]
 
-[node name="Switch" parent="Elements" instance=ExtResource( 3 )]
+[node name="Switch_1" parent="Elements" instance=ExtResource( 3 )]
+pause_mode = 2
 position = Vector2( -148.871, -7.7746 )
 
 [node name="Connectors" type="Node2D" parent="."]
@@ -35,6 +47,27 @@ z_index = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Btn_Pause" type="Button" parent="CanvasLayer/Control"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = -58.0
+margin_right = 56.0
+margin_bottom = -10.0
+grow_vertical = 0
+rect_min_size = Vector2( 56, 58 )
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 1 )
+custom_styles/focus = SubResource( 2 )
+custom_styles/normal = SubResource( 1 )
+toggle_mode = true
+icon = ExtResource( 6 )
+expand_icon = true
+script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -79,3 +112,4 @@ icon = ExtResource( 5 )
 margin_top = 372.0
 margin_bottom = 430.0
 icon = ExtResource( 11 )
+[connection signal="toggled" from="CanvasLayer/Control/Btn_Pause" to="CanvasLayer/Control/Btn_Pause" method="_on_Btn_Pause_toggled"]

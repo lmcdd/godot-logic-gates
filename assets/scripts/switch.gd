@@ -3,6 +3,9 @@ extends Element
 
 export(bool) var state = false setget set_state
 
+func _operation():
+	return state
+
 func set_state(val):
 	state = val
 	if state:
