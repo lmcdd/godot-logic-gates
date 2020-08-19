@@ -12,5 +12,9 @@ func get_slot_type(): #override
 func emit(v):
 	val = v
 	#print(owner.name, ' ', name,' ', v)
-	for slot_conn in connections["out"] + connections["in"]:
-		slot_conn.assign(v, self)
+	
+	for connections in [inp_connections, out_connections]:
+		for path_connection in connections:
+			var connection = get_node_or_null(path_connection)
+			if connection:
+				connection.assign(v, self)

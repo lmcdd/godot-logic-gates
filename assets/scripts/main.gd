@@ -1,6 +1,7 @@
 extends Node2D
 
 var from_slot
+var cur_slot
 var target
 var line
 
@@ -17,6 +18,7 @@ func bind_element_signals(element):
 			)
 
 func _ready():
+
 	for element in $Elements.get_children():
 		bind_element_signals(element)
 
@@ -37,39 +39,54 @@ func _on_Slot_input_event(viewport, event, shape_idx, slot_node):
 	if event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT: #create connection
-				var connections = slot_node.connections["out"] + slot_node.connections["in"]
-				if not(slot_node.get_slot_type() == Slot.TYPES.IN and connections.size() > 0):
-					if !from_slot:
-						from_slot = slot_node
-						line = Connector.new()
-						line.p_slot1 = slot_node
-						$Connectors.add_child(line)
-					else:
-						if slot_node.get_slot_type() != from_slot.get_slot_type(): # In -> out , Out -> in
-							var exists_connect = false #
-							for connection in connections:
-								exists_connect = from_slot in [connection.p_slot1, connection.p_slot2]
-								if exists_connect:
-									break
-							if exists_connect == false:
-								line.points = PoolVector2Array(
-										[from_slot.global_position, slot_node.global_position]
-								)
-								line.p_slot2 = slot_node
-								from_slot.connections["out"].append(line)
-								slot_node.connections["in"].append(line)
-								from_slot = null
-								line = null
+				_create_connection(slot_node)
 			elif event.button_index == BUTTON_RIGHT: #del connection
-				var conn_groups = slot_node.connections.keys()
-				for conn_group in conn_groups:
-					for connection in slot_node.connections[conn_group]:
+				if not(from_slot):
+					_del_connection(slot_node)
+
+
+func _create_connection(slot_node):
+	var conn_count = slot_node.out_connections.size() + slot_node.inp_connections.size()
+	#print('cr|',slot_node.name,conn_count, slot_node.inp_connections, slot_node.out_connections)
+	if not(slot_node.get_slot_type() == Slot.TYPES.IN and conn_count > 0):
+		if !from_slot: # FROM
+			from_slot = slot_node
+			var l = load("res://assets/scenes/connector.tscn").instance()
+			line = l
+			line.auto_set_slot(slot_node)
+			$Connectors.add_child(line)
+		else: # TO
+			if slot_node.get_slot_type() != from_slot.get_slot_type(): # In -> out , Out -> in
+				var exists_connect = false #
+				for connections in [slot_node.out_connections, slot_node.inp_connections]:
+					for path_connection in connections:
+						var connection = get_node_or_null(path_connection)
 						if connection:
-							if is_instance_valid(connection):
-								for slot in [connection.p_slot1, connection.p_slot2]:
-									var i = slot.connections[conn_group].find(connection)
-									slot.connections[conn_group].remove(i)
-									connection.queue_free()
+							exists_connect = from_slot in [connection.emitter, connection.receiver]
+							if exists_connect:
+								break
+				if exists_connect == false:
+					line.points = PoolVector2Array(
+						[from_slot.global_position, slot_node.global_position]
+					)
+					from_slot.out_connections.append(line.get_path())
+					slot_node.inp_connections.append(line.get_path())
+					line.auto_set_slot(slot_node)
+					from_slot = null
+					line = null
+
+
+func _del_connection(slot_node):
+	for conn in slot_node.out_connections:
+		var c = get_node_or_null(conn)
+		c.del()
+		
+	for conn in slot_node.inp_connections:
+		var c = get_node_or_null(conn)
+		c.del()
+
+	from_slot = null
+	line = null
 
 
 func _on_Element_input_event(viewport, event, shape_idx, element_node):
@@ -82,18 +99,25 @@ func _on_Element_input_event(viewport, event, shape_idx, element_node):
 
 
 func _process(delta):
+	if cur_slot:
+		print(cur_slot, cur_slot.connections)
+
 	if line:
 		line.points = PoolVector2Array(
 				[from_slot.global_position, get_global_mouse_position()]
 		)
-	if target:
-		var mp = get_global_mouse_position()
-		target.global_position = mp
-		target.upd_pos_connections()
+		if Input.is_action_just_pressed("ui_cancel"): # ESC
+			if line:
+				if is_instance_valid(line):
+					line.queue_free()
+					line = null
+					from_slot = null
+	else:
+		if target:
+			var mp = get_global_mouse_position()
+			target.global_position = mp
+			target.call_deferred("upd_pos_connections")
+			
 	
-	if Input.is_action_just_pressed("ui_cancel"):
-		if line:
-			if is_instance_valid(line):
-				line.queue_free()
-				line = null
-				from_slot = null
+		
+		

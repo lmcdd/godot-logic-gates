@@ -5,10 +5,15 @@ var state_inputs = [] setget set_state_input
 
 func upd_pos_connections():
 	for slot in $"Slots".get_children():
-		for slot_conn in slot.connections["out"]:
-			slot_conn.points[0] = slot.global_position
-		for slot_conn in slot.connections["in"]:
-			slot_conn.points[1] = slot.global_position
+		for path_slot_conn in slot.out_connections:
+			var slot_conn = get_node_or_null(path_slot_conn)
+			if slot_conn:
+				slot_conn.points[0] = slot.global_position
+
+		for path_slot_conn in slot.inp_connections:
+			var slot_conn = get_node_or_null(path_slot_conn)
+			if slot_conn:
+				slot_conn.points[1] = slot.global_position
 			
 
 func _upd(): #early binding for override

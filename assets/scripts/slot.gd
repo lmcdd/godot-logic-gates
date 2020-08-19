@@ -3,7 +3,10 @@ class_name Slot
 
 enum TYPES {NONE, IN, OUT}
 
-var connections = {"out":[],"in":[]}
+var out_connections = []
+var inp_connections = [] 
+
+
 
 func get_slot_type():
 	return TYPES.NONE

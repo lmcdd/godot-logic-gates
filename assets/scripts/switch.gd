@@ -1,6 +1,7 @@
+tool
 extends Element
 
-var state = false setget set_state
+export(bool) var state = false setget set_state
 
 func set_state(val):
 	state = val

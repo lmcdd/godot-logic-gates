@@ -11,32 +11,44 @@ func set_val(v):
 		default_color = Color.white
 
 
-var p_slot1 setget set_slot1
-var p_slot2 setget set_slot2
+var emitter setget set_emitter
+var receiver setget set_receiver
 
-func set_slot1(val):
-	p_slot1 = val
-	set_slot(val)
+
+func del():
+	for slot in [emitter, receiver]:
+		slot.inp_connections.erase(self.get_path())
+		slot.out_connections.erase(self.get_path())
+	assign(false, self)
+	queue_free()
 	
-func set_slot2(val):
-	p_slot2 = val
-	set_slot(val)
+	
+func set_emitter(v):
+	emitter = v
+	if emitter and receiver:
+		assign(emitter.val, emitter)
 
-func set_slot(val):
-	if p_slot1 and p_slot2:
-		if p_slot2.get_slot_type() == Slot.TYPES.IN:
-			assign(p_slot1.val, p_slot1)
-		else:
-			assign(p_slot2.val, p_slot2)
-		
+
+func set_receiver(v):
+	receiver = v
+	if emitter and receiver:
+		assign(emitter.val, emitter)
+
+
+func auto_set_slot(slot):
+	if slot.get_slot_type() == Slot.TYPES.IN: # IN - receiver
+		receiver = slot
+	else: #OUT - emitter
+		emitter = slot
+	if emitter and receiver:
+		assign(emitter.val, emitter)
+	
 
 func assign(v, source):
 	self.val = v
 	#print(emitter.owner.name, '.', emitter.name, '->', name, ' ', v)
-	if p_slot1 and p_slot2:
-		for p_slot in [p_slot1, p_slot2]:
-			if p_slot.get_slot_type() == Slot.TYPES.IN:
-				p_slot.assign(v, self)
+	if emitter and receiver:
+		receiver.assign(v, self)
 
 
 func _ready():

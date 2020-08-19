@@ -7,7 +7,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 24.5082, 24.7507 )
 
-[sub_resource type="CircleShape2D" id=3]
+[sub_resource type="CircleShape2D" id=2]
 
 [node name="Clock" type="Node2D"]
 script = ExtResource( 2 )
@@ -34,4 +34,4 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Slots/Out_1"]
-shape = SubResource( 3 )
+shape = SubResource( 2 )
