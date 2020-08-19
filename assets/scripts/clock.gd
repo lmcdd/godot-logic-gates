@@ -4,9 +4,12 @@ extends Element
 export(float) var timeout = 0.5 setget _set_timeout
 var state = false
 
+
 func _set_timeout(val):
 	timeout = val
-	$Timer.wait_time = val
+	if is_instance_valid($Timer):
+		$Timer.wait_time = val
+
 
 func _ready():
 	G.connect("toggle_pause", self, "_on_toggle_pause")

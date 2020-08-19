@@ -7,6 +7,7 @@ var line
 
 onready var btns_add_element = $"CanvasLayer/Control/VBoxContainer"
 
+
 func bind_element_signals(element):
 	element.get_node("PickArea").connect(
 			"input_event", self, "_on_Element_input_event", [element]
@@ -66,14 +67,15 @@ func _create_connection(slot_node):
 							if exists_connect:
 								break
 				if exists_connect == false:
-					line.points = PoolVector2Array(
-						[from_slot.global_position, slot_node.global_position]
-					)
-					from_slot.out_connections.append(line.get_path())
-					slot_node.inp_connections.append(line.get_path())
-					line.auto_set_slot(slot_node)
-					from_slot = null
-					line = null
+					if slot_node.owner != from_slot.owner:
+						line.points = PoolVector2Array(
+							[from_slot.global_position, slot_node.global_position]
+						)
+						from_slot.out_connections.append(line.get_path())
+						slot_node.inp_connections.append(line.get_path())
+						line.auto_set_slot(slot_node)
+						from_slot = null
+						line = null
 
 
 func _del_connection(slot_node):
@@ -119,7 +121,3 @@ func _process(delta):
 			var mp = get_global_mouse_position()
 			target.global_position = mp
 			target.call_deferred("upd_pos_connections")
-			
-	
-		
-		

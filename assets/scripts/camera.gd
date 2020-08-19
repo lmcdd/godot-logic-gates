@@ -1,7 +1,7 @@
 extends Camera2D
 
-
 var zoom_step = 1.1
+
 
 func _input(event):
 	if event is InputEventMouse:

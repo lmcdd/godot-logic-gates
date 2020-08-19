@@ -11,6 +11,4 @@ func _on_Btn_Pause_toggled(button_pressed):
 		icon = load("res://assets/images/play.png")
 	else:
 		icon = load("res://assets/images/pause.png")
-	
-		
 

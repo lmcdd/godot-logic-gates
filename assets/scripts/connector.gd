@@ -3,16 +3,16 @@ class_name Connector
 
 var val = false setget set_val
 
+var emitter setget set_emitter
+var receiver setget set_receiver
+
+
 func set_val(v):
 	val = v
 	if val:
 		default_color = Color.green
 	else:
 		default_color = Color.white
-
-
-var emitter setget set_emitter
-var receiver setget set_receiver
 
 
 func del():
@@ -42,7 +42,7 @@ func auto_set_slot(slot):
 		emitter = slot
 	if emitter and receiver:
 		assign(emitter.val, emitter)
-	
+
 
 func assign(v, source):
 	self.val = v

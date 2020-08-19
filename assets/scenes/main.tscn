@@ -33,10 +33,11 @@ script = ExtResource( 2 )
 [node name="Elements" type="Node2D" parent="."]
 
 [node name="Lamp_1" parent="Elements" instance=ExtResource( 4 )]
+position = Vector2( 0.353577, 0 )
 
 [node name="Switch_1" parent="Elements" instance=ExtResource( 3 )]
 pause_mode = 2
-position = Vector2( -148.871, -7.7746 )
+position = Vector2( -151.699, -7.42104 )
 
 [node name="Connectors" type="Node2D" parent="."]
 z_index = -1
